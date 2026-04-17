@@ -50,11 +50,11 @@ Or open the solution/project in Visual Studio and start it there.
 4. Click Load folders
 5. Uncheck subfolders you want to exclude
 6. Use one of the following:
-  - Compare to preview changes
-  - Mirror to make the target identical to the source
-  - Synchronize to copy newer files in both directions
-  - Backup to copy only new/changed files to the target
-  - Click Save to store the job list (It auto saves normally)
+ - Compare to preview changes
+ - Mirror to make the target identical to the source
+ - Synchronize to copy newer files in both directions
+ - Backup to copy only new/changed files to the target
+ - Click Save to store the job list (It auto saves normally)
 
 # Data storage
 Jobs are stored in:
