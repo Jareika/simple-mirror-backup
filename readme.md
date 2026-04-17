@@ -44,26 +44,28 @@ Or open the solution/project in Visual Studio and start it there.
 
 # How to use
 
-Create a new job
-Select a source folder
-Select a target folder
-Click Load folders
-Uncheck subfolders you want to exclude
-Use one of the following:
-Compare to preview changes
-Mirror to make the target identical to the source
-Synchronize to copy newer files in both directions
-Backup to copy only new/changed files to the target
-Click Save to store the job list
-Data storage
+1. Create a new job
+2. Select a source folder
+3. Select a target folder
+4. Click Load folders
+5. Uncheck subfolders you want to exclude
+6. Use one of the following:
+7. Compare to preview changes
+8. Mirror to make the target identical to the source
+9. Synchronize to copy newer files in both directions
+10. Backup to copy only new/changed files to the target
+11. Click Save to store the job list
+
+# Data storage
 Jobs are stored in:
 
 Data/jobs.json
 next to the application.
 
-Notes
-Reparse points/symlinks are skipped during folder scanning.
-Synchronize mode does not propagate deletions.
-Always test with non-critical data first.
-License
+# Notes
+- Reparse points/symlinks are skipped during folder scanning.
+- Synchronize mode does not propagate deletions.
+- Always test with non-critical data first.
+
+# License
 This project is licensed under the MIT License. See the LICENSE file for details.
