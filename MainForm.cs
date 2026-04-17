@@ -57,6 +57,8 @@ public sealed class MainForm : Form
     public MainForm()
     {
         Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
+        TrySetWindowIcon();
+
         AutoScaleMode = AutoScaleMode.Dpi;
         Text = "Simple Mirror Backup";
         Width = 1200;
@@ -1464,6 +1466,23 @@ public sealed class MainForm : Form
         }
 
         txtLog.AppendText($"[{DateTime.Now:HH:mm:ss}] {message}{Environment.NewLine}");
+    }
+	
+    private void TrySetWindowIcon()
+    {
+        try
+        {
+            using var stream = typeof(MainForm).Assembly
+                .GetManifestResourceStream("SimpleMirrorBackup.Assets.App.ico");
+
+            if (stream is null)
+                return;
+
+            Icon = new Icon(stream);
+        }
+        catch
+        {
+        }
     }
 
     private string GetUniqueJobName(string baseName)
