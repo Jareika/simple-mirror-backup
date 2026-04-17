@@ -1,0 +1,40 @@
+# Build output
+[Bb]in/
+[Oo]bj/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Rider / ReSharper
+.idea/
+_ReSharper*/
+*.DotSettings.user
+
+# Test / coverage
+TestResults/
+coverage/
+*.coverage
+*.coveragexml
+
+# Publish output
+publish/
+artifacts/
+
+# Logs
+*.log
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# NuGet
+packages/
+*.nupkg
+
+# Generated files
+*.cache
+*.tmp
