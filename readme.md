@@ -19,7 +19,7 @@ It supports three modes:
 
 - Windows Forms app for Windows 11
 - Fast folder comparison
-- Preview window before running a job
+- Compare before running a job (Attention! It does not compare automatically before a job)
 - Exclude subfolders by unchecking them in the folder tree
 - Save and reuse backup jobs
 - Colored comparison preview
@@ -37,6 +37,7 @@ dotnet build
 Run
 dotnet run
 Or open the solution/project in Visual Studio and start it there.
+```
 
 ### Build Requirements
 - .NET 8 SDK or .NET 8 Desktop Runtime
@@ -66,5 +67,3 @@ Synchronize mode does not propagate deletions.
 Always test with non-critical data first.
 License
 This project is licensed under the MIT License. See the LICENSE file for details.
-
----
