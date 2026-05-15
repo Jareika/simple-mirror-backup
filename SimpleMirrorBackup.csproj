@@ -6,11 +6,15 @@
     <UseWindowsForms>true</UseWindowsForms>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-	<ApplicationIcon>Assets\App.ico</ApplicationIcon>
+    <ApplicationIcon>Assets\App.ico</ApplicationIcon>
   </PropertyGroup>
-  
+
   <ItemGroup>
     <EmbeddedResource Include="Assets\App.ico" />
+    <Content Include="Language\*.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <PackageReference Include="SSH.NET" Version="2024.1.0" />
   </ItemGroup>
 
 </Project>

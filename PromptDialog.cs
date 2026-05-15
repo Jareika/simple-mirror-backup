@@ -36,7 +36,7 @@ public static class PromptDialog
 
         var ok = new Button
         {
-            Text = "OK",
+            Text = AppLanguage.T("Common.Ok", "OK"),
             DialogResult = DialogResult.OK,
             AutoSize = true,
             MinimumSize = new Size(96, 32),
@@ -45,7 +45,7 @@ public static class PromptDialog
 
         var cancel = new Button
         {
-            Text = "Cancel",
+            Text = AppLanguage.T("Common.Cancel", "Abbrechen"),
             DialogResult = DialogResult.Cancel,
             AutoSize = true,
             MinimumSize = new Size(96, 32),

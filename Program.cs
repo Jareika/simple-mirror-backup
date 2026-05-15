@@ -14,7 +14,7 @@ internal static class Program
         {
             MessageBox.Show(
                 ex.ToString(),
-                "Simple Mirror Backup - Startup error",
+                "Simple Mirror Backup - Startfehler",
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Error);
         }

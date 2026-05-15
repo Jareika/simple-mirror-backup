@@ -14,6 +14,11 @@ public sealed class BackupService
         string Target,
         HashSet<string> Excluded);
 
+    private readonly record struct PathSnapshot(
+        bool Exists,
+        bool IsDirectory,
+        DateTime? LastWriteTimeUtc);
+
     public Task<BackupPlan> BuildMirrorPlanAsync(BackupJob job, CancellationToken cancellationToken = default)
         => BuildPlanAsync(job, BackupMode.Mirror, cancellationToken);
 
@@ -31,6 +36,30 @@ public sealed class BackupService
 
     public Task RunBackupAsync(BackupJob job, IProgress<string> progress, CancellationToken cancellationToken = default)
         => RunAsync(job, BackupMode.Backup, progress, cancellationToken);
+
+    public Task RunPlanAsync(BackupPlan plan, IProgress<string> progress, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(plan);
+        ArgumentNullException.ThrowIfNull(progress);
+
+        return Task.Run(() =>
+        {
+            progress.Report(GetStartMessage(plan));
+
+            foreach (var warning in plan.Warnings)
+                progress.Report(T("Log.WarningPrefix", "Hinweis: ") + warning);
+
+            if (plan.SelectedCount == 0)
+            {
+                progress.Report(T("Service.NoChangesSelected", "Keine Änderungen ausgewählt."));
+                progress.Report(T("Common.Done", "Fertig."));
+                return;
+            }
+
+            ExecutePlan(plan, progress, cancellationToken);
+            progress.Report(T("Common.Done", "Fertig."));
+        }, cancellationToken);
+    }
 
     private static Task<BackupPlan> BuildPlanAsync(BackupJob job, BackupMode mode, CancellationToken cancellationToken)
     {
@@ -50,10 +79,10 @@ public sealed class BackupService
             progress.Report(GetStartMessage(plan));
 
             foreach (var warning in plan.Warnings)
-                progress.Report("Note: " + warning);
+                progress.Report(T("Log.WarningPrefix", "Hinweis: ") + warning);
 
             ExecutePlan(plan, progress, cancellationToken);
-            progress.Report("Done.");
+            progress.Report(T("Common.Done", "Fertig."));
         }, cancellationToken);
     }
 
@@ -106,7 +135,7 @@ public sealed class BackupService
         if (!TryEnumerateFiles(sourceDir, plan, out var sourceFiles) ||
             !TryEnumerateDirectories(sourceDir, plan, out var sourceDirectories))
         {
-            plan.Warnings.Add($"Folder skipped due to read error: {sourceDir}");
+            plan.Warnings.Add(TF("Service.Warning.FolderSkippedReadError", "Ordner übersprungen wegen Lesefehler: {0}", sourceDir));
             return;
         }
 
@@ -157,23 +186,15 @@ public sealed class BackupService
 
                     if (targetType == EntryPresenceType.Directory)
                     {
-                        plan.Entries.Add(new BackupPlanEntry
-                        {
-                            Kind = BackupPlanEntryKind.DeleteDirectoryFromTarget,
-                            RelativePath = NormalizeRelative(rel),
-                            AffectedPath = targetDirectoryMap[name]
-                        });
+                        plan.Entries.Add(CreateDeleteDirectoryFromTargetEntry(
+                            rel,
+                            targetDirectoryMap[name],
+                            sourceFile));
                     }
 
                     if (targetType != EntryPresenceType.File || NeedsCopy(sourceFile, targetFile))
                     {
-                        plan.Entries.Add(new BackupPlanEntry
-                        {
-                            Kind = BackupPlanEntryKind.CopyToTarget,
-                            RelativePath = NormalizeRelative(rel),
-                            SourcePath = sourceFile,
-                            DestinationPath = targetFile
-                        });
+                        plan.Entries.Add(CreateCopyToTargetEntry(rel, sourceFile, targetFile));
                     }
 
                     break;
@@ -183,12 +204,10 @@ public sealed class BackupService
                 {
                     if (targetType == EntryPresenceType.File)
                     {
-                        plan.Entries.Add(new BackupPlanEntry
-                        {
-                            Kind = BackupPlanEntryKind.DeleteFileFromTarget,
-                            RelativePath = NormalizeRelative(rel),
-                            AffectedPath = targetFileMap[name]
-                        });
+                        plan.Entries.Add(CreateDeleteFileFromTargetEntry(
+                            rel,
+                            targetFileMap[name],
+                            sourceDirectoryMap[name]));
                     }
 
                     BuildOneWayPlan(
@@ -210,21 +229,15 @@ public sealed class BackupService
 
                     if (targetType == EntryPresenceType.File)
                     {
-                        plan.Entries.Add(new BackupPlanEntry
-                        {
-                            Kind = BackupPlanEntryKind.DeleteFileFromTarget,
-                            RelativePath = NormalizeRelative(rel),
-                            AffectedPath = targetFileMap[name]
-                        });
+                        plan.Entries.Add(CreateDeleteFileFromTargetEntry(
+                            rel,
+                            targetFileMap[name]));
                     }
                     else if (targetType == EntryPresenceType.Directory)
                     {
-                        plan.Entries.Add(new BackupPlanEntry
-                        {
-                            Kind = BackupPlanEntryKind.DeleteDirectoryFromTarget,
-                            RelativePath = NormalizeRelative(rel),
-                            AffectedPath = targetDirectoryMap[name]
-                        });
+                        plan.Entries.Add(CreateDeleteDirectoryFromTargetEntry(
+                            rel,
+                            targetDirectoryMap[name]));
                     }
 
                     break;
@@ -259,7 +272,7 @@ public sealed class BackupService
             if (!TryEnumerateFiles(sourceDir, plan, out sourceFiles) ||
                 !TryEnumerateDirectories(sourceDir, plan, out sourceDirectories))
             {
-                plan.Warnings.Add($"Synchronization skipped due to read error: {sourceDir}");
+                plan.Warnings.Add(TF("Service.Warning.SyncSkippedReadError", "Synchronisierung übersprungen wegen Lesefehler: {0}", sourceDir));
                 return;
             }
         }
@@ -269,7 +282,7 @@ public sealed class BackupService
             if (!TryEnumerateFiles(targetDir, plan, out targetFiles) ||
                 !TryEnumerateDirectories(targetDir, plan, out targetDirectories))
             {
-                plan.Warnings.Add($"Synchronization skipped due to read error: {targetDir}");
+                plan.Warnings.Add(TF("Service.Warning.SyncSkippedReadError", "Synchronisierung übersprungen wegen Lesefehler: {0}", targetDir));
                 return;
             }
         }
@@ -303,23 +316,17 @@ public sealed class BackupService
             switch (sourceType, targetType)
             {
                 case (EntryPresenceType.File, EntryPresenceType.None):
-                    plan.Entries.Add(new BackupPlanEntry
-                    {
-                        Kind = BackupPlanEntryKind.CopyToTarget,
-                        RelativePath = NormalizeRelative(rel),
-                        SourcePath = sourceFileMap[name],
-                        DestinationPath = Path.Combine(targetDir, name)
-                    });
+                    plan.Entries.Add(CreateCopyToTargetEntry(
+                        rel,
+                        sourceFileMap[name],
+                        Path.Combine(targetDir, name)));
                     break;
 
                 case (EntryPresenceType.None, EntryPresenceType.File):
-                    plan.Entries.Add(new BackupPlanEntry
-                    {
-                        Kind = BackupPlanEntryKind.CopyToSource,
-                        RelativePath = NormalizeRelative(rel),
-                        SourcePath = targetFileMap[name],
-                        DestinationPath = Path.Combine(sourceDir, name)
-                    });
+                    plan.Entries.Add(CreateCopyToSourceEntry(
+                        rel,
+                        targetFileMap[name],
+                        Path.Combine(sourceDir, name)));
                     break;
 
                 case (EntryPresenceType.File, EntryPresenceType.File):
@@ -331,23 +338,17 @@ public sealed class BackupService
                     {
                         if (SourceWinsSynchronization(sourceFile, targetFile))
                         {
-                            plan.Entries.Add(new BackupPlanEntry
-                            {
-                                Kind = BackupPlanEntryKind.CopyToTarget,
-                                RelativePath = NormalizeRelative(rel),
-                                SourcePath = sourceFile,
-                                DestinationPath = Path.Combine(targetDir, name)
-                            });
+                            plan.Entries.Add(CreateCopyToTargetEntry(
+                                rel,
+                                sourceFile,
+                                Path.Combine(targetDir, name)));
                         }
                         else
                         {
-                            plan.Entries.Add(new BackupPlanEntry
-                            {
-                                Kind = BackupPlanEntryKind.CopyToSource,
-                                RelativePath = NormalizeRelative(rel),
-                                SourcePath = targetFile,
-                                DestinationPath = Path.Combine(sourceDir, name)
-                            });
+                            plan.Entries.Add(CreateCopyToSourceEntry(
+                                rel,
+                                targetFile,
+                                Path.Combine(sourceDir, name)));
                         }
                     }
 
@@ -368,8 +369,10 @@ public sealed class BackupService
 
                 case (EntryPresenceType.File, EntryPresenceType.Directory):
                 case (EntryPresenceType.Directory, EntryPresenceType.File):
-                    plan.Warnings.Add(
-                        $"Conflict skipped: '{NormalizeRelative(rel)}' is a file on one side and a folder on the other.");
+                    plan.Warnings.Add(TF(
+                        "Service.Warning.ConflictFileDirectory",
+                        "Konflikt übersprungen: '{0}' ist auf einer Seite eine Datei und auf der anderen ein Ordner.",
+                        NormalizeRelative(rel)));
                     break;
             }
         }
@@ -396,7 +399,7 @@ public sealed class BackupService
         if (plan.Mode == BackupMode.Synchronize)
             Directory.CreateDirectory(plan.SourceRoot);
 
-        foreach (var entry in plan.Entries)
+        foreach (var entry in plan.SelectedEntries)
         {
             ct.ThrowIfCancellationRequested();
 
@@ -425,7 +428,7 @@ public sealed class BackupService
             }
             catch (Exception ex)
             {
-                progress.Report($"Error for '{entry.RelativePath}': {ex.Message}");
+                progress.Report($"Fehler bei '{entry.RelativePath}': {ex.Message}");
             }
         }
     }
@@ -440,12 +443,15 @@ public sealed class BackupService
         if (targetExisted)
             File.SetAttributes(targetFile, FileAttributes.Normal);
 
+        if (Directory.Exists(targetFile))
+            RemoveDirectoryTree(targetFile);
+
         File.Copy(sourceFile, targetFile, overwrite: true);
         File.SetLastWriteTimeUtc(targetFile, sourceInfo.LastWriteTimeUtc);
 
         progress.Report(targetExisted
-            ? $"Updated: {targetFile}"
-            : $"Copied: {targetFile}");
+            ? TF("Service.Progress.Updated", "Aktualisiert: {0}", targetFile)
+            : TF("Service.Progress.Copied", "Kopiert: {0}", targetFile));
     }
 
     private static void ExecuteDeleteFile(string path, IProgress<string> progress)
@@ -455,7 +461,7 @@ public sealed class BackupService
 
         File.SetAttributes(path, FileAttributes.Normal);
         File.Delete(path);
-        progress.Report($"Deleted: {path}");
+        progress.Report(TF("Service.Progress.Deleted", "Gelöscht: {0}", path));
     }
 
     private static void ExecuteDeleteDirectory(string path, IProgress<string> progress)
@@ -464,7 +470,7 @@ public sealed class BackupService
             return;
 
         RemoveDirectoryTree(path);
-        progress.Report($"Folder deleted: {path}");
+        progress.Report(TF("Service.Progress.DirectoryDeleted", "Ordner gelöscht: {0}", path));
     }
 
     private static bool NeedsCopy(string sourceFile, string targetFile)
@@ -505,22 +511,22 @@ public sealed class BackupService
         var target = NormalizeAbsolutePath(job.TargetPath);
 
         if (string.IsNullOrWhiteSpace(source))
-            throw new InvalidOperationException("Source folder is missing.");
+            throw new InvalidOperationException(T("Service.Error.SourceMissing", "Quellordner fehlt."));
 
         if (File.Exists(source))
-            throw new InvalidOperationException("Source path is a file, not a folder.");
+            throw new InvalidOperationException(T("Service.Error.SourceIsFile", "Quellpfad ist eine Datei, kein Ordner."));
 
         if (!Directory.Exists(source))
-            throw new DirectoryNotFoundException("Source folder not found.");
+            throw new DirectoryNotFoundException(T("Service.Error.SourceNotFound", "Quellordner nicht gefunden."));
 
         if (string.IsNullOrWhiteSpace(target))
-            throw new InvalidOperationException("Target folder is missing.");
+            throw new InvalidOperationException(T("Service.Error.TargetMissing", "Zielordner fehlt."));
 
         if (File.Exists(target))
-            throw new InvalidOperationException("Target path is a file, not a folder.");
+            throw new InvalidOperationException(T("Service.Error.TargetIsFile", "Zielpfad ist eine Datei, kein Ordner."));
 
         if (string.Equals(source, target, StringComparison.OrdinalIgnoreCase))
-            throw new InvalidOperationException("Source and target must not be identical.");
+            throw new InvalidOperationException(T("Service.Error.SourceTargetSame", "Quelle und Ziel dürfen nicht identisch sein."));
 
         var excluded = new HashSet<string>(
             (job.ExcludedRelativePaths ?? new List<string>())
@@ -533,12 +539,16 @@ public sealed class BackupService
 
     private static string GetStartMessage(BackupPlan plan)
     {
+        var selectedText = plan.SelectedCount == plan.TotalCount
+            ? TF("Service.Start.SelectedAll", "{0} Aktionen", plan.TotalCount)
+            : TF("Service.Start.SelectedPartial", "{0} von {1} Aktionen", plan.SelectedCount, plan.TotalCount);
+
         return plan.Mode switch
         {
-            BackupMode.Mirror => $"Starting mirror: {plan.SourceRoot} -> {plan.TargetRoot}",
-            BackupMode.Synchronize => $"Starting synchronization: {plan.SourceRoot} <-> {plan.TargetRoot}",
-            BackupMode.Backup => $"Starting backup: {plan.SourceRoot} -> {plan.TargetRoot}",
-            _ => "Starting job."
+            BackupMode.Mirror => TF("Service.StartMirror", "Starte Spiegelung: {0} -> {1} ({2})", plan.SourceRoot, plan.TargetRoot, selectedText),
+            BackupMode.Synchronize => TF("Service.StartSynchronize", "Starte Synchronisierung: {0} <-> {1} ({2})", plan.SourceRoot, plan.TargetRoot, selectedText),
+            BackupMode.Backup => TF("Service.StartBackup", "Starte Backup: {0} -> {1} ({2})", plan.SourceRoot, plan.TargetRoot, selectedText),
+            _ => "Starte Auftrag."
         };
     }
 
@@ -583,7 +593,7 @@ public sealed class BackupService
         catch (Exception ex)
         {
             files = new List<string>();
-            plan.Warnings.Add($"Could not read files in '{path}': {ex.Message}");
+            plan.Warnings.Add(TF("Service.Warning.FilesReadError", "Dateien konnten nicht gelesen werden in '{0}': {1}", path, ex.Message));
             return false;
         }
     }
@@ -602,7 +612,7 @@ public sealed class BackupService
         catch (Exception ex)
         {
             directories = new List<string>();
-            plan.Warnings.Add($"Could not read folders in '{path}': {ex.Message}");
+            plan.Warnings.Add(TF("Service.Warning.DirectoriesReadError", "Ordner konnten nicht gelesen werden in '{0}': {1}", path, ex.Message));
             return false;
         }
     }
@@ -665,4 +675,133 @@ public sealed class BackupService
             return path.Trim().TrimEnd('\\', '/');
         }
     }
+
+    private static BackupPlanEntry CreateCopyToTargetEntry(string relativePath, string sourcePath, string targetPath)
+    {
+        return CreateEntry(
+            BackupPlanEntryKind.CopyToTarget,
+            relativePath,
+            sourcePath,
+            targetPath,
+            null,
+            sourcePath,
+            targetPath);
+    }
+
+    private static BackupPlanEntry CreateCopyToSourceEntry(string relativePath, string targetSideSourcePath, string sourceSideDestinationPath)
+    {
+        return CreateEntry(
+            BackupPlanEntryKind.CopyToSource,
+            relativePath,
+            targetSideSourcePath,
+            sourceSideDestinationPath,
+            null,
+            sourceSideDestinationPath,
+            targetSideSourcePath);
+    }
+
+    private static BackupPlanEntry CreateDeleteFileFromTargetEntry(string relativePath, string targetPath, string? sourceSidePath = null)
+    {
+        return CreateEntry(
+            BackupPlanEntryKind.DeleteFileFromTarget,
+            relativePath,
+            null,
+            null,
+            targetPath,
+            sourceSidePath,
+            targetPath);
+    }
+
+    private static BackupPlanEntry CreateDeleteFileFromSourceEntry(string relativePath, string sourcePath, string? targetSidePath = null)
+    {
+        return CreateEntry(
+            BackupPlanEntryKind.DeleteFileFromSource,
+            relativePath,
+            null,
+            null,
+            sourcePath,
+            sourcePath,
+            targetSidePath);
+    }
+
+    private static BackupPlanEntry CreateDeleteDirectoryFromTargetEntry(string relativePath, string targetPath, string? sourceSidePath = null)
+    {
+        return CreateEntry(
+            BackupPlanEntryKind.DeleteDirectoryFromTarget,
+            relativePath,
+            null,
+            null,
+            targetPath,
+            sourceSidePath,
+            targetPath);
+    }
+
+    private static BackupPlanEntry CreateDeleteDirectoryFromSourceEntry(string relativePath, string sourcePath, string? targetSidePath = null)
+    {
+        return CreateEntry(
+            BackupPlanEntryKind.DeleteDirectoryFromSource,
+            relativePath,
+            null,
+            null,
+            sourcePath,
+            sourcePath,
+            targetSidePath);
+    }
+
+    private static BackupPlanEntry CreateEntry(
+        BackupPlanEntryKind kind,
+        string relativePath,
+        string? sourcePath,
+        string? destinationPath,
+        string? affectedPath,
+        string? sourceSidePath,
+        string? targetSidePath)
+    {
+        var sourceSnapshot = SnapshotPath(sourceSidePath);
+        var targetSnapshot = SnapshotPath(targetSidePath);
+
+        return new BackupPlanEntry
+        {
+            Kind = kind,
+            RelativePath = NormalizeRelative(relativePath),
+			EntryKey = kind + "|" + NormalizeRelative(relativePath),
+            SourcePath = sourcePath,
+            DestinationPath = destinationPath,
+            AffectedPath = affectedPath,
+            SourceExists = sourceSnapshot.Exists,
+            SourceIsDirectory = sourceSnapshot.IsDirectory,
+            SourceLastWriteTimeUtc = sourceSnapshot.LastWriteTimeUtc,
+            TargetExists = targetSnapshot.Exists,
+            TargetIsDirectory = targetSnapshot.IsDirectory,
+            TargetLastWriteTimeUtc = targetSnapshot.LastWriteTimeUtc
+        };
+    }
+
+    private static PathSnapshot SnapshotPath(string? path)
+    {
+        if (string.IsNullOrWhiteSpace(path))
+            return default;
+
+        try
+        {
+            if (File.Exists(path))
+            {
+                var info = new FileInfo(path);
+                return new PathSnapshot(true, false, info.LastWriteTimeUtc);
+            }
+
+            if (Directory.Exists(path))
+            {
+                return new PathSnapshot(true, true, Directory.GetLastWriteTimeUtc(path));
+            }
+        }
+        catch
+        {
+        }
+
+        return default;
+    }
+
+    private static string T(string key, string fallback) => AppLanguage.T(key, fallback);
+    private static string TF(string key, string fallback, params object[] args) => AppLanguage.F(key, fallback, args);
 }
