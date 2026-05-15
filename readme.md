@@ -1,5 +1,7 @@
 # Simple Mirror Backup
 
+<img width="1657" height="978" alt="image" src="https://github.com/user-attachments/assets/a5fa9d42-39d4-4201-b7f5-a28053842da1" />
+
 Simple Mirror Backup is a lightweight Windows 11 desktop application for folder-based backups, mirroring, and synchronization.
 
 It is designed for users who want a clear and predictable tool for copying files between two folders, previewing planned actions before execution, and organizing backup jobs in a simple UI.
