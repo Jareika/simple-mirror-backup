@@ -229,8 +229,10 @@
     "Service.Error.SourceMissing": "Källmapp saknas.",
     "Service.Error.SourceIsFile": "Källsökvägen är en fil, inte en mapp.",
     "Service.Error.SourceNotFound": "Källmapp hittades inte.",
+	"Service.Error.SourceUnavailable": "Sökvägen till källan är inte tillgänglig: {0}",
     "Service.Error.TargetMissing": "Målmapp saknas.",
     "Service.Error.TargetIsFile": "Målsökvägen är en fil, inte en mapp.",
+	"Service.Error.TargetUnavailable": "Sökvägen till målet är inte tillgänglig: {0}",
     "Service.Error.SourceTargetSame": "Källa och mål får inte vara identiska."
   }
 }

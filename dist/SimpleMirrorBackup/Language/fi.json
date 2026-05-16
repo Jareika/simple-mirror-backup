@@ -229,8 +229,10 @@
     "Service.Error.SourceMissing": "Lähdekansio puuttuu.",
     "Service.Error.SourceIsFile": "Lähdepolku on tiedosto, ei kansio.",
     "Service.Error.SourceNotFound": "Lähdekansiota ei löytynyt.",
+	"Service.Error.SourceUnavailable": "Lähdepolku ei ole saavutettavissa: {0}",
     "Service.Error.TargetMissing": "Kohdekansio puuttuu.",
     "Service.Error.TargetIsFile": "Kohdepolku on tiedosto, ei kansio.",
+	"Service.Error.TargetUnavailable": "Kohdepolku ei ole saavutettavissa: {0}",
     "Service.Error.SourceTargetSame": "Lähde ja kohde eivät voi olla samat."
   }
 }

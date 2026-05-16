@@ -229,8 +229,10 @@
     "Service.Error.SourceMissing": "תיקיית המקור חסרה.",
     "Service.Error.SourceIsFile": "נתיב המקור הוא קובץ, לא תיקייה.",
     "Service.Error.SourceNotFound": "תיקיית המקור לא נמצאה.",
+	"Service.Error.SourceUnavailable": "נתיב המקור אינו נגיש: {0}",
     "Service.Error.TargetMissing": "תיקיית היעד חסרה.",
     "Service.Error.TargetIsFile": "נתיב היעד הוא קובץ, לא תיקייה.",
+	"Service.Error.TargetUnavailable": "נתיב היעד אינו נגיש: {0}",
     "Service.Error.SourceTargetSame": "המקור והיעד לא יכולים להיות זהים."
   }
 }

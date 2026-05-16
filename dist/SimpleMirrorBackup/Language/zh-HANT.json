@@ -229,8 +229,10 @@
     "Service.Error.SourceMissing": "缺少來源資料夾。",
     "Service.Error.SourceIsFile": "來源路徑是檔案，不是資料夾。",
     "Service.Error.SourceNotFound": "找不到來源資料夾。",
+	"Service.Error.SourceUnavailable": "來源路徑無法存取：{0}",
     "Service.Error.TargetMissing": "缺少目標資料夾。",
     "Service.Error.TargetIsFile": "目標路徑是檔案，不是資料夾。",
+	"Service.Error.TargetUnavailable": "目標路徑無法存取：{0}",
     "Service.Error.SourceTargetSame": "來源與目標不能相同。"
   }
 }

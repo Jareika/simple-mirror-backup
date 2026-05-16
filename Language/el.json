@@ -229,8 +229,10 @@
     "Service.Error.SourceMissing": "Ο φάκελος πηγής λείπει.",
     "Service.Error.SourceIsFile": "Η διαδρομή πηγής είναι αρχείο, όχι φάκελος.",
     "Service.Error.SourceNotFound": "Ο φάκελος πηγής δεν βρέθηκε.",
+	"Service.Error.SourceUnavailable": "Η διαδρομή προέλευσης δεν είναι προσβάσιμη: {0}",
     "Service.Error.TargetMissing": "Ο φάκελος προορισμού λείπει.",
     "Service.Error.TargetIsFile": "Η διαδρομή προορισμού είναι αρχείο, όχι φάκελος.",
+	"Service.Error.TargetUnavailable": "Η διαδρομή προορισμού δεν είναι προσβάσιμη: {0}",
     "Service.Error.SourceTargetSame": "Η πηγή και ο προορισμός δεν μπορούν να είναι ίδιοι."
   }
 }

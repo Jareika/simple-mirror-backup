@@ -229,8 +229,10 @@
     "Service.Error.SourceMissing": "Bronmap ontbreekt.",
     "Service.Error.SourceIsFile": "Bronpad is een bestand, geen map.",
     "Service.Error.SourceNotFound": "Bronmap niet gevonden.",
+	"Service.Error.SourceUnavailable": "Bronpad is niet bereikbaar: {0}",
     "Service.Error.TargetMissing": "Doelmap ontbreekt.",
     "Service.Error.TargetIsFile": "Doelpad is een bestand, geen map.",
+	"Service.Error.TargetUnavailable": "Doelpad is niet bereikbaar: {0}",
     "Service.Error.SourceTargetSame": "Bron en doel mogen niet identiek zijn."
   }
 }

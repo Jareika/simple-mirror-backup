@@ -517,7 +517,12 @@ public sealed class BackupService
             throw new InvalidOperationException(T("Service.Error.SourceIsFile", "Quellpfad ist eine Datei, kein Ordner."));
 
         if (!Directory.Exists(source))
+        {
+            if (!IsPathRootReachable(source))
+                throw new IOException(TF("Service.Error.SourceUnavailable", "Quellpfad ist nicht erreichbar: {0}", source));
+
             throw new DirectoryNotFoundException(T("Service.Error.SourceNotFound", "Quellordner nicht gefunden."));
+        }
 
         if (string.IsNullOrWhiteSpace(target))
             throw new InvalidOperationException(T("Service.Error.TargetMissing", "Zielordner fehlt."));
@@ -528,6 +533,9 @@ public sealed class BackupService
         if (string.Equals(source, target, StringComparison.OrdinalIgnoreCase))
             throw new InvalidOperationException(T("Service.Error.SourceTargetSame", "Quelle und Ziel dürfen nicht identisch sein."));
 
+        if (!Directory.Exists(target) && !IsPathRootReachable(target))
+            throw new IOException(TF("Service.Error.TargetUnavailable", "Zielpfad ist nicht erreichbar: {0}", target));
+
         var excluded = new HashSet<string>(
             (job.ExcludedRelativePaths ?? new List<string>())
                 .Select(NormalizeRelative)
@@ -535,6 +543,58 @@ public sealed class BackupService
             StringComparer.OrdinalIgnoreCase);
 
         return new ValidatedJob(source, target, excluded);
+    }
+	
+    private static bool IsPathRootReachable(string path)
+    {
+        if (string.IsNullOrWhiteSpace(path))
+            return false;
+
+        var uncRoot = TryGetUncShareRoot(path);
+        if (!string.IsNullOrWhiteSpace(uncRoot))
+            return SafeDirectoryExists(uncRoot);
+
+        try
+        {
+            var root = Path.GetPathRoot(path);
+            if (string.IsNullOrWhiteSpace(root))
+                return false;
+
+            var drive = new DriveInfo(root);
+            return drive.IsReady;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    private static string? TryGetUncShareRoot(string path)
+    {
+        if (string.IsNullOrWhiteSpace(path))
+            return null;
+
+        var normalized = path.Trim().Replace('/', '\\');
+        if (!normalized.StartsWith(@"\\", StringComparison.Ordinal))
+            return null;
+
+        var parts = normalized.Split('\\', StringSplitOptions.RemoveEmptyEntries);
+        if (parts.Length < 2)
+            return null;
+
+        return @"\\" + parts[0] + "\\" + parts[1];
+    }
+
+    private static bool SafeDirectoryExists(string path)
+    {
+        try
+        {
+            return Directory.Exists(path);
+        }
+        catch
+        {
+            return false;
+        }
     }
 
     private static string GetStartMessage(BackupPlan plan)

@@ -229,8 +229,10 @@
     "Service.Error.SourceMissing": "Chybí zdrojová složka.",
     "Service.Error.SourceIsFile": "Zdrojová cesta je soubor, ne složka.",
     "Service.Error.SourceNotFound": "Zdrojová složka nebyla nalezena.",
+	"Service.Error.SourceUnavailable": "Zdrojová cesta není dostupná: {0}",
     "Service.Error.TargetMissing": "Chybí cílová složka.",
     "Service.Error.TargetIsFile": "Cílová cesta je soubor, ne složka.",
-    "Service.Error.SourceTargetSame": "Zdroj a cíl nesmí být totožné."
+	"Service.Error.TargetUnavailable": "Cílová cesta není dostupná: {0}",
+	"Service.Error.SourceTargetSame": "Zdroj a cíl nesmí být totožné."
   }
 }

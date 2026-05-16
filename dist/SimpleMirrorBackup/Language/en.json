@@ -229,8 +229,10 @@
     "Service.Error.SourceMissing": "Source folder is missing.",
     "Service.Error.SourceIsFile": "Source path is a file, not a folder.",
     "Service.Error.SourceNotFound": "Source folder not found.",
+	"Service.Error.SourceUnavailable": "Source path is not reachable: {0}",
     "Service.Error.TargetMissing": "Target folder is missing.",
     "Service.Error.TargetIsFile": "Target path is a file, not a folder.",
+    "Service.Error.TargetUnavailable": "Target path is not reachable: {0}",
     "Service.Error.SourceTargetSame": "Source and target must not be identical."
   }
 }

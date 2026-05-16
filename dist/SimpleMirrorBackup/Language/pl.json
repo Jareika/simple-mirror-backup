@@ -229,8 +229,10 @@
     "Service.Error.SourceMissing": "Brak folderu źródłowego.",
     "Service.Error.SourceIsFile": "Ścieżka źródłowa jest plikiem, a nie folderem.",
     "Service.Error.SourceNotFound": "Nie znaleziono folderu źródłowego.",
+	"Service.Error.SourceUnavailable": "Ścieżka źródłowa jest niedostępna: {0}",
     "Service.Error.TargetMissing": "Brak folderu docelowego.",
     "Service.Error.TargetIsFile": "Ścieżka docelowa jest plikiem, a nie folderem.",
+	"Service.Error.TargetUnavailable": "Ścieżka docelowa jest niedostępna: {0}",
     "Service.Error.SourceTargetSame": "Źródło i cel nie mogą być identyczne."
   }
 }

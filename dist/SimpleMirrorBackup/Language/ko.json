@@ -229,8 +229,10 @@
     "Service.Error.SourceMissing": "원본 폴더가 없습니다.",
     "Service.Error.SourceIsFile": "원본 경로는 폴더가 아니라 파일입니다.",
     "Service.Error.SourceNotFound": "원본 폴더를 찾을 수 없습니다.",
+	"Service.Error.SourceUnavailable": "소스 경로에 접근할 수 없습니다: {0}",
     "Service.Error.TargetMissing": "대상 폴더가 없습니다.",
     "Service.Error.TargetIsFile": "대상 경로는 폴더가 아니라 파일입니다.",
+	"Service.Error.TargetUnavailable": "대상 경로에 접근할 수 없습니다: {0}",
     "Service.Error.SourceTargetSame": "원본과 대상은 동일할 수 없습니다."
   }
 }

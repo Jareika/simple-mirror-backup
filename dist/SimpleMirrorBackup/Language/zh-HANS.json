@@ -229,8 +229,10 @@
     "Service.Error.SourceMissing": "源文件夹缺失。",
     "Service.Error.SourceIsFile": "源路径是文件，而不是文件夹。",
     "Service.Error.SourceNotFound": "未找到源文件夹。",
+	"Service.Error.SourceUnavailable": "源路径无法访问：{0}",
     "Service.Error.TargetMissing": "目标文件夹缺失。",
     "Service.Error.TargetIsFile": "目标路径是文件，而不是文件夹。",
+	"Service.Error.TargetUnavailable": "目标路径无法访问：{0}",
     "Service.Error.SourceTargetSame": "源和目标不能相同。"
   }
 }

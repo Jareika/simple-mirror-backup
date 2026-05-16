@@ -229,8 +229,10 @@
     "Service.Error.SourceMissing": "Lipsește dosarul sursă.",
     "Service.Error.SourceIsFile": "Calea sursă este un fișier, nu un dosar.",
     "Service.Error.SourceNotFound": "Dosarul sursă nu a fost găsit.",
+	"Service.Error.SourceUnavailable": "Calea sursă nu este accesibilă: {0}",
     "Service.Error.TargetMissing": "Lipsește dosarul destinație.",
     "Service.Error.TargetIsFile": "Calea destinației este un fișier, nu un dosar.",
+	"Service.Error.TargetUnavailable": "Calea destinație nu este accesibilă: {0}",
     "Service.Error.SourceTargetSame": "Sursa și destinația nu trebuie să fie identice."
   }
 }

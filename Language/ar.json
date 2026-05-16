@@ -229,8 +229,10 @@
     "Service.Error.SourceMissing": "مجلد المصدر مفقود.",
     "Service.Error.SourceIsFile": "مسار المصدر ملف وليس مجلدًا.",
     "Service.Error.SourceNotFound": "لم يتم العثور على مجلد المصدر.",
+	"Service.Error.SourceUnavailable": "مسار المصدر غير قابل للوصول: {0}",
     "Service.Error.TargetMissing": "مجلد الهدف مفقود.",
     "Service.Error.TargetIsFile": "مسار الهدف ملف وليس مجلدًا.",
-    "Service.Error.SourceTargetSame": "لا يمكن أن يكون المصدر والهدف متماثلين."
+    "Service.Error.TargetUnavailable": "مسار الوجهة غير قابل للوصول: {0}",
+	"Service.Error.SourceTargetSame": "يجب ألا يكون المصدر والوجهة متماثلين."
   }
 }

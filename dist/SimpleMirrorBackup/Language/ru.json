@@ -229,8 +229,10 @@
     "Service.Error.SourceMissing": "Исходная папка отсутствует.",
     "Service.Error.SourceIsFile": "Исходный путь — это файл, а не папка.",
     "Service.Error.SourceNotFound": "Исходная папка не найдена.",
+	"Service.Error.SourceUnavailable": "Путь к источнику недоступен: {0}",
     "Service.Error.TargetMissing": "Папка назначения отсутствует.",
     "Service.Error.TargetIsFile": "Путь назначения — это файл, а не папка.",
+	"Service.Error.TargetUnavailable": "Путь к назначению недоступен: {0}",
     "Service.Error.SourceTargetSame": "Источник и назначение не должны совпадать."
   }
 }

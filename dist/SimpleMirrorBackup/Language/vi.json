@@ -229,8 +229,10 @@
     "Service.Error.SourceMissing": "Thiếu thư mục nguồn.",
     "Service.Error.SourceIsFile": "Đường dẫn nguồn là tệp, không phải thư mục.",
     "Service.Error.SourceNotFound": "Không tìm thấy thư mục nguồn.",
+	"Service.Error.SourceUnavailable": "Đường dẫn nguồn không thể truy cập: {0}",
     "Service.Error.TargetMissing": "Thiếu thư mục đích.",
     "Service.Error.TargetIsFile": "Đường dẫn đích là tệp, không phải thư mục.",
+	"Service.Error.TargetUnavailable": "Đường dẫn đích không thể truy cập: {0}",
     "Service.Error.SourceTargetSame": "Nguồn và đích không được trùng nhau."
   }
 }

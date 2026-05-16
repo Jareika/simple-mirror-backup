@@ -229,8 +229,10 @@
     "Service.Error.SourceMissing": "Kildemappen mangler.",
     "Service.Error.SourceIsFile": "Kildestien er en fil, ikke en mappe.",
     "Service.Error.SourceNotFound": "Kildemappen ble ikke funnet.",
+	"Service.Error.SourceUnavailable": "Kildebanen er ikke tilgjengelig: {0}",
     "Service.Error.TargetMissing": "Målmappen mangler.",
     "Service.Error.TargetIsFile": "Målstien er en fil, ikke en mappe.",
+	"Service.Error.TargetUnavailable": "Målbanen er ikke tilgjengelig: {0}",
     "Service.Error.SourceTargetSame": "Kilde og mål kan ikke være like."
   }
 }

@@ -229,8 +229,10 @@
     "Service.Error.SourceMissing": "Відсутня вихідна папка.",
     "Service.Error.SourceIsFile": "Шлях джерела — це файл, а не папка.",
     "Service.Error.SourceNotFound": "Вихідну папку не знайдено.",
+	"Service.Error.SourceUnavailable": "Шлях до джерела недоступний: {0}",
     "Service.Error.TargetMissing": "Відсутня папка призначення.",
     "Service.Error.TargetIsFile": "Шлях призначення — це файл, а не папка.",
+	"Service.Error.TargetUnavailable": "Шлях до призначення недоступний: {0}",
     "Service.Error.SourceTargetSame": "Джерело і призначення не повинні збігатися."
   }
 }

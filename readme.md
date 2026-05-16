@@ -93,6 +93,7 @@ This file contains:
 - folder structure
 - remote device settings
 - UI settings
+  - You can color the buttons there
 - remembered comparison selections
 
 ## Main Concepts

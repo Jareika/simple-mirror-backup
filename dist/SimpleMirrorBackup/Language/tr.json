@@ -229,8 +229,10 @@
     "Service.Error.SourceMissing": "Kaynak klasör eksik.",
     "Service.Error.SourceIsFile": "Kaynak yol bir dosya, klasör değil.",
     "Service.Error.SourceNotFound": "Kaynak klasör bulunamadı.",
+	"Service.Error.SourceUnavailable": "Kaynak yolu erişilebilir değil: {0}",
     "Service.Error.TargetMissing": "Hedef klasör eksik.",
     "Service.Error.TargetIsFile": "Hedef yol bir dosya, klasör değil.",
+	"Service.Error.TargetUnavailable": "Hedef yolu erişilebilir değil: {0}",
     "Service.Error.SourceTargetSame": "Kaynak ve hedef aynı olmamalıdır."
   }
 }

@@ -229,8 +229,10 @@
     "Service.Error.SourceMissing": "Folder sumber tidak ada.",
     "Service.Error.SourceIsFile": "Jalur sumber adalah file, bukan folder.",
     "Service.Error.SourceNotFound": "Folder sumber tidak ditemukan.",
+	"Service.Error.SourceUnavailable": "Jalur sumber tidak dapat dijangkau: {0}",
     "Service.Error.TargetMissing": "Folder tujuan tidak ada.",
     "Service.Error.TargetIsFile": "Jalur tujuan adalah file, bukan folder.",
+	"Service.Error.TargetUnavailable": "Jalur tujuan tidak dapat dijangkau: {0}",
     "Service.Error.SourceTargetSame": "Sumber dan tujuan tidak boleh sama."
   }
 }

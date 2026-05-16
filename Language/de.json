@@ -229,8 +229,10 @@
     "Service.Error.SourceMissing": "Quellordner fehlt.",
     "Service.Error.SourceIsFile": "Quellpfad ist eine Datei, kein Ordner.",
     "Service.Error.SourceNotFound": "Quellordner nicht gefunden.",
+	"Service.Error.SourceUnavailable": "Source path is not reachable: {0}",
     "Service.Error.TargetMissing": "Zielordner fehlt.",
     "Service.Error.TargetIsFile": "Zielpfad ist eine Datei, kein Ordner.",
-    "Service.Error.SourceTargetSame": "Quelle und Ziel dürfen nicht identisch sein."
+    "Service.Error.TargetUnavailable": "Target path is not reachable: {0}",
+    "Service.Error.SourceTargetSame": "Source and target must not be identical."
   }
 }

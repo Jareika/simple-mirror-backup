@@ -229,8 +229,10 @@
     "Service.Error.SourceMissing": "ソースフォルダーがありません。",
     "Service.Error.SourceIsFile": "ソースパスはファイルであり、フォルダーではありません。",
     "Service.Error.SourceNotFound": "ソースフォルダーが見つかりません。",
+	"Service.Error.SourceUnavailable": "ソースパスにアクセスできません: {0}",
     "Service.Error.TargetMissing": "ターゲットフォルダーがありません。",
     "Service.Error.TargetIsFile": "ターゲットパスはファイルであり、フォルダーではありません。",
+	"Service.Error.TargetUnavailable": "ターゲットパスにアクセスできません: {0}",
     "Service.Error.SourceTargetSame": "ソースとターゲットは同一にできません。"
   }
 }

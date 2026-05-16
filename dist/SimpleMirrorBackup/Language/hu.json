@@ -229,8 +229,10 @@
     "Service.Error.SourceMissing": "A forrásmappa hiányzik.",
     "Service.Error.SourceIsFile": "A forrásútvonal fájl, nem mappa.",
     "Service.Error.SourceNotFound": "A forrásmappa nem található.",
+	"Service.Error.SourceUnavailable": "A forrás elérhetetlen: {0}",
     "Service.Error.TargetMissing": "A célmappa hiányzik.",
     "Service.Error.TargetIsFile": "A célútvonal fájl, nem mappa.",
+	"Service.Error.TargetUnavailable": "A cél elérhetetlen: {0}",
     "Service.Error.SourceTargetSame": "A forrás és a cél nem lehet azonos."
   }
 }

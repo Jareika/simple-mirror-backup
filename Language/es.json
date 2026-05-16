@@ -229,8 +229,10 @@
     "Service.Error.SourceMissing": "Falta la carpeta de origen.",
     "Service.Error.SourceIsFile": "La ruta de origen es un archivo, no una carpeta.",
     "Service.Error.SourceNotFound": "Carpeta de origen no encontrada.",
+	"Service.Error.SourceUnavailable": "La ruta de origen no es accesible: {0}",
     "Service.Error.TargetMissing": "Falta la carpeta de destino.",
     "Service.Error.TargetIsFile": "La ruta de destino es un archivo, no una carpeta.",
+	"Service.Error.TargetUnavailable": "La ruta de destino no es accesible: {0}",
     "Service.Error.SourceTargetSame": "Origen y destino no pueden ser iguales."
   }
 }

@@ -229,8 +229,10 @@
     "Service.Error.SourceMissing": "Cartella di origine mancante.",
     "Service.Error.SourceIsFile": "Il percorso di origine è un file, non una cartella.",
     "Service.Error.SourceNotFound": "Cartella di origine non trovata.",
+	"Service.Error.SourceUnavailable": "Il percorso di origine non è raggiungibile: {0}",
     "Service.Error.TargetMissing": "Cartella di destinazione mancante.",
     "Service.Error.TargetIsFile": "Il percorso di destinazione è un file, non una cartella.",
+	"Service.Error.TargetUnavailable": "Il percorso di destinazione non è raggiungibile: {0}",
     "Service.Error.SourceTargetSame": "Origine e destinazione non possono essere uguali."
   }
 }

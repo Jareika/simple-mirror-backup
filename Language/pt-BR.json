@@ -229,8 +229,10 @@
     "Service.Error.SourceMissing": "Pasta de origem ausente.",
     "Service.Error.SourceIsFile": "O caminho de origem é um arquivo, não uma pasta.",
     "Service.Error.SourceNotFound": "Pasta de origem não encontrada.",
+	"Service.Error.SourceUnavailable": "O caminho de origem não está acessível: {0}",
     "Service.Error.TargetMissing": "Pasta de destino ausente.",
     "Service.Error.TargetIsFile": "O caminho de destino é um arquivo, não uma pasta.",
+	"Service.Error.TargetUnavailable": "O caminho de destino não está acessível: {0}",
     "Service.Error.SourceTargetSame": "Origem e destino não podem ser iguais."
   }
 }

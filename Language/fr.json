@@ -229,8 +229,10 @@
     "Service.Error.SourceMissing": "Dossier source manquant.",
     "Service.Error.SourceIsFile": "Le chemin source est un fichier, pas un dossier.",
     "Service.Error.SourceNotFound": "Dossier source introuvable.",
+	"Service.Error.SourceUnavailable": "Le chemin source est inaccessible : {0}",
     "Service.Error.TargetMissing": "Dossier cible manquant.",
     "Service.Error.TargetIsFile": "Le chemin cible est un fichier, pas un dossier.",
+	"Service.Error.TargetUnavailable": "Le chemin cible est inaccessible : {0}",
     "Service.Error.SourceTargetSame": "Source et cible ne doivent pas être identiques."
   }
 }
